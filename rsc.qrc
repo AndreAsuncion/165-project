@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/enemies">
+        <file>ram.png</file>
+        <file>vicuna.png</file>
+    </qresource>
+    <qresource prefix="/backgrounds">
+        <file>BG1.jpg</file>
+    </qresource>
+    <qresource prefix="/misc">
+        <file>icon.png</file>
+    </qresource>
+</RCC>
