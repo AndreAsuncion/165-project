@@ -28,6 +28,8 @@ public slots:
 
     // these slots will deal with the GUI
     void playerMenu(); // Loads the buttons
+    void basicAttack();
+    void abilityMenu();
     void textBox(QString string); // makes a text box
 private:
     Button *fiteButton;

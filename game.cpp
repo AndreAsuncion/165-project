@@ -50,7 +50,34 @@ void Game::start()
     startCombat();
 }
 
-//first turn
+//void Game::playerMenu()
+//{
+//    // clearing the GUI of the text
+//    GUI * panel = new GUI();
+//    scene->addItem(panel);
+
+//    // drawing the buttons, there's going to be two a fight and an item button
+//    fiteButton = new Button(QString("Basic Attack"));
+//    int fbxPos = 0;
+//    int fbyPos = 525;
+//    fiteButton->setPos(fbxPos,fbyPos);
+
+//    scene->addItem(fiteButton);
+
+//    // it used to be items but I changed it to abilities
+//    itemButton = new Button(QString("Ability"));
+//    int ibxPos = 200;
+//    int ibyPos = 525;
+//    itemButton->setPos(ibxPos,ibyPos);
+//    connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
+//    connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
+//    connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
+
+//    scene->addItem(itemButton);
+
+//}
+
+
 void Game::playerMenu()
 {
     // clearing the GUI of the text
@@ -58,11 +85,11 @@ void Game::playerMenu()
     scene->addItem(panel);
 
     // drawing the buttons, there's going to be two a fight and an item button
-    fiteButton = new Button(QString("Fight"));
+    fiteButton = new Button(QString("Basic Attack"));
     int fbxPos = 0;
     int fbyPos = 525;
     fiteButton->setPos(fbxPos,fbyPos);
-    connect(fiteButton,SIGNAL(clicked()),this,SLOT(playerAction()));
+
     scene->addItem(fiteButton);
 
     // it used to be items but I changed it to abilities
@@ -71,12 +98,13 @@ void Game::playerMenu()
     int ibyPos = 525;
     itemButton->setPos(ibxPos,ibyPos);
     connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
+    connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
     connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
-    scene->addItem(itemButton);
+    connect(this, SIGNAL(enemyDefeated()), this, SLOT(showFightButton())); // new connection
 
-    // player health
-    // QGraphicsTextItem * playerHealth = new QGraphicsTextItem(QString("Work in Progress"));
+    scene->addItem(itemButton);
 }
+
 
 void Game::abilityMenu()
 {
@@ -114,6 +142,75 @@ void Game::abilityMenu()
     connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(backButton);
 }
+
+void Game::basicAttack()
+{
+    //remove unneeded buttons
+    scene->removeItem(fiteButton);
+    scene->removeItem(itemButton);
+
+    int attackPower = player->getAP();
+    int enemyAttack = enemy->getAP();
+
+    int enemyHealth = enemy->getHP();
+
+    enemyHealth -= attackPower;
+
+    enemy->setHP(enemyHealth);
+
+    int playerHealth = player->getHP();
+
+    playerHealth -= enemyAttack;
+
+    player->setHP(playerHealth);
+
+
+    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+    enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
+    enemyHealthText->setDefaultTextColor(Qt::white);
+    enemyHealthText->setFont(QFont("times",16));
+    enemyHealthText->setPos(400, 525);
+    scene->addItem(enemyHealthText);
+
+    backButton = new Button(QString("Back"));
+    int bbxPos = 600;
+    int bbyPos = 525;
+    backButton->setPos(bbxPos,bbyPos);
+    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
+    scene->addItem(backButton);
+
+}
+
+//void Game::basicAttack(Unit& enemy)
+//{
+//    //remove unneeded buttons
+//    scene->removeItem(fiteButton);
+//    scene->removeItem(itemButton);
+
+//    int attackPower = player->getAP();
+//    int enemyAttack = enemy.getAP();
+
+//    int enemyHealth = enemy.getHP();
+
+//    enemyHealth -= attackPower;
+
+//    enemy.setHP(enemyHealth);
+
+//    int playerHealth = player->getHP();
+
+//    playerHealth -= enemyAttack;
+
+//    player->setHP(playerHealth);
+
+
+//    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+//    enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy.getHP()));
+//    enemyHealthText->setDefaultTextColor(Qt::white);
+//    enemyHealthText->setFont(QFont("times",16));
+//    enemyHealthText->setPos(400, 525);
+//    scene->addItem(enemyHealthText);
+//}
+
 
 void Game::textBox(QString string)
 {
