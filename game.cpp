@@ -53,29 +53,33 @@ void Game::start()
 
 void Game::playerMenu()
 {
-    // clearing the GUI of the text
-    GUI * panel = new GUI();
-    scene->addItem(panel);
+    if(enemy->getHP() >= 0){
+        // clearing the GUI of the text
+        GUI * panel = new GUI();
+        scene->addItem(panel);
 
-    // drawing the buttons, there's going to be two a fight and an item button
-    fiteButton = new Button(QString("Basic Attack"));
-    int fbxPos = 0;
-    int fbyPos = 525;
-    fiteButton->setPos(fbxPos,fbyPos);
+        // drawing the buttons, there's going to be two a fight and an item button
+        fiteButton = new Button(QString("Basic Attack"));
+        int fbxPos = 0;
+        int fbyPos = 525;
+        fiteButton->setPos(fbxPos,fbyPos);
 
-    scene->addItem(fiteButton);
+        scene->addItem(fiteButton);
 
-    // it used to be items but I changed it to abilities
-    itemButton = new Button(QString("Ability"));
-    int ibxPos = 200;
-    int ibyPos = 525;
-    itemButton->setPos(ibxPos,ibyPos);
-    connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
-    connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
-    connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
-    connect(this, SIGNAL(enemyDefeated()), this, SLOT(showFightButton())); // new connection
+        // it used to be items but I changed it to abilities
+        itemButton = new Button(QString("Ability"));
+        int ibxPos = 200;
+        int ibyPos = 525;
+        itemButton->setPos(ibxPos,ibyPos);
+        connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
+        connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
+        connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
+    //    connect(this, SIGNAL(enemyDefeated()), this, SLOT(showFightButton())); // new connection
 
-    scene->addItem(itemButton);
+        scene->addItem(itemButton);
+    } else{
+        startCombat();
+    }
 }
 
 
@@ -146,7 +150,9 @@ void Game::basicAttack()
     enemyHealthText->setPos(400, 525);
     scene->addItem(enemyHealthText);
 
+
     Game::enemyAttack();
+
 
     backButton = new Button(QString("Back"));
     int bbxPos = 600;
@@ -154,7 +160,6 @@ void Game::basicAttack()
     backButton->setPos(bbxPos,bbyPos);
     connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(backButton);
-
 }
 
 void Game::enemyAttack(){
@@ -165,16 +170,7 @@ void Game::enemyAttack(){
 
     int enemyAttack = enemy->getAP();
 
-//    int playerHealth = player->getHP();
-
-
-//    playerHealth -= (enemyAttack*-1);
-
-
     player->changeHealth(enemyAttack);
-
-//    player->setHP(playerHealth);
-
 
     //shows HP
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
