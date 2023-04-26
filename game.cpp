@@ -50,6 +50,7 @@ void Game::start()
     startCombat();
 }
 
+//first turn
 void Game::playerMenu()
 {
     // clearing the GUI of the text
