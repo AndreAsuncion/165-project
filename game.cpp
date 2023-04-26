@@ -11,8 +11,8 @@
 #include <QIcon>
 
 Player * player;
-QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png"};
-QList<QString> enemyName = {"ram","vicuna"};
+QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png", ":/enemies/horse.png"};
+QList<QString> enemyName = {"ram","vicuna","horse"};
 QList<QString> imageBG = {":/backgrounds/BG1.jpg"};
 
 Game::Game(QWidget *parent)

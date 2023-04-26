@@ -2,6 +2,7 @@
     <qresource prefix="/enemies">
         <file>ram.png</file>
         <file>vicuna.png</file>
+        <file>horse.png</file>
     </qresource>
     <qresource prefix="/backgrounds">
         <file>BG1.jpg</file>
