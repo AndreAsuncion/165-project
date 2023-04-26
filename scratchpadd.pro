@@ -22,3 +22,5 @@ HEADERS += \
 
 RESOURCES += \
     rsc.qrc
+
+DISTFILES +=
