@@ -11,6 +11,7 @@
 #include <QIcon>
 
 Player * player;
+Unit * enemy;
 QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png", ":/enemies/horse.png", ":/enemies/dog.png"};
 QList<QString> enemyName = {"ram","vicuna","horse", "dog"};
 QList<QString> imageBG = {":/backgrounds/BG1.jpg"};
@@ -57,7 +58,7 @@ void Game::playerMenu()
     scene->addItem(panel);
 
     // drawing the buttons, there's going to be two a fight and an item button
-    Button * fiteButton = new Button(QString("Fight"));
+    fiteButton = new Button(QString("Fight"));
     int fbxPos = 0;
     int fbyPos = 525;
     fiteButton->setPos(fbxPos,fbyPos);
@@ -65,15 +66,53 @@ void Game::playerMenu()
     scene->addItem(fiteButton);
 
     // it used to be items but I changed it to abilities
-    Button * itemButton = new Button(QString("Ability"));
+    itemButton = new Button(QString("Ability"));
     int ibxPos = 200;
     int ibyPos = 525;
     itemButton->setPos(ibxPos,ibyPos);
     connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
+    connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
     scene->addItem(itemButton);
 
     // player health
     // QGraphicsTextItem * playerHealth = new QGraphicsTextItem(QString("Work in Progress"));
+}
+
+void Game::abilityMenu()
+{
+    //remove unneeded buttons
+    scene->removeItem(fiteButton);
+    scene->removeItem(itemButton);
+
+    // drawing the buttons
+    circleButton = new Button(QString("Circle"));
+    int cbxPos = 0;
+    int cbyPos = 525;
+    circleButton->setPos(cbxPos,cbyPos);
+    connect(circleButton,SIGNAL(clicked()),this,SLOT(moveCircle()));
+    scene->addItem(circleButton);
+
+    // it used to be items but I changed it to abilities
+    triangleButton = new Button(QString("Triangle"));
+    int tbxPos = 200;
+    int tbyPos = 525;
+    triangleButton->setPos(tbxPos,tbyPos);
+    connect(triangleButton,SIGNAL(clicked()),this,SLOT(moveTriangle()));
+    scene->addItem(triangleButton);
+
+    squareButton = new Button(QString("Square"));
+    int sbxPos = 400;
+    int sbyPos = 525;
+    squareButton->setPos(sbxPos,sbyPos);
+    connect(squareButton,SIGNAL(clicked()),this,SLOT(moveSquare()));
+    scene->addItem(squareButton);
+
+    backButton = new Button(QString("Back"));
+    int bbxPos = 600;
+    int bbyPos = 525;
+    backButton->setPos(bbxPos,bbyPos);
+    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
+    scene->addItem(backButton);
 }
 
 void Game::textBox(QString string)
@@ -115,7 +154,7 @@ void Game::displayMainMenu()
 void Game::startCombat()
 {
     // function creates an enemy based on player's stats
-    Unit * enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 5), player->getAP() - (player->getLVL() * 3), player->getLVL());
+    enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 5), player->getAP() - (player->getLVL() * 3), player->getLVL());
     textBox(QString("A wild %1 is approaching!").arg(enemy->getName()));
 }
 
@@ -131,7 +170,7 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int le
 
 
     // creates new enemy
-    Unit * enemy = new Unit();
+    enemy = new Unit();
     QGraphicsPixmapItem * enemySprite = new QGraphicsPixmapItem();
     enemySprite->setPixmap(imagePaths[randomIndex]);
     enemySprite->setPos(100,100);

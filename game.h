@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include "unit.h"
+#include "button.h"
 
 class Game: public QGraphicsView
 {
@@ -27,9 +28,14 @@ public slots:
 
     // these slots will deal with the GUI
     void playerMenu(); // Loads the buttons
-    void playerAction(){};
     void textBox(QString string); // makes a text box
 private:
+    Button *fiteButton;
+    Button *itemButton;
+    Button *circleButton;
+    Button *triangleButton;
+    Button *squareButton;
+    Button *backButton;
     // void drawGUI();
 };
 
