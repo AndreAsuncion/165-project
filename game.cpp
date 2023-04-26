@@ -1,6 +1,4 @@
 #include "game.h"
-#include "button.h"
-#include "gui.h"
 #include "player.h"
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
@@ -50,67 +48,128 @@ void Game::start()
     startCombat();
 }
 
+
 void Game::playerMenu()
 {
-    // clearing the GUI of the text
-    GUI * panel = new GUI();
-    scene->addItem(panel);
+    scene->removeItem(panel);
 
-    // drawing the buttons, there's going to be two a fight and an item button
-    Button * fiteButton = new Button(QString("Fight"));
-    int fbxPos = 0;
-    int fbyPos = 525;
-    fiteButton->setPos(fbxPos,fbyPos);
-    connect(fiteButton,SIGNAL(clicked()),this,SLOT(basicAttack()));
-    scene->addItem(fiteButton);
+    if(enemy->getHP() >= 0){
+        // clearing the GUI of the text
+        panel = new GUI();
+        scene->addItem(panel);
 
-    // it used to be items but I changed it to abilities
-    Button * itemButton = new Button(QString("Ability"));
-    int ibxPos = 200;
-    int ibyPos = 525;
-    itemButton->setPos(ibxPos,ibyPos);
-    connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
-    scene->addItem(itemButton);
+        // drawing the buttons, there's going to be two a fight and an item button
+        fiteButton = new Button(QString("Basic Attack"));
+        int fbxPos = 0;
+        int fbyPos = 525;
+        fiteButton->setPos(fbxPos,fbyPos);
 
-    // player health
-    // QGraphicsTextItem * playerHealth = new QGraphicsTextItem(QString("Work in Progress"));
+        scene->addItem(fiteButton);
+
+        // it used to be items but I changed it to abilities
+        itemButton = new Button(QString("Ability"));
+        int ibxPos = 200;
+        int ibyPos = 525;
+        itemButton->setPos(ibxPos,ibyPos);
+        connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
+        connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
+    //    connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
+    //    connect(this, SIGNAL(enemyDefeated()), this, SLOT(showFightButton())); // new connection
+
+        scene->addItem(itemButton);
+    } else{
+        startCombat();
+    }
 }
 
-/*
- * abilitymenu
- *
- * draw gui
- * draw three buttons
- * one for each type circle, square, triangle
- *
- * or
- *
- * basic attack
- *
- * after an action is chosen
- * playerAction starts which
- * sends a signal to damage calculator
- * then changes are made to the unit
- *
- * after playerAction resolves
- * start enemyAction
- * get a random number from the random number method
- * make the enemy perform a random action based on the number
- *
- * after enemyAction resolves
- * loop back to playerAction
- *
- * keep looping until one combatant is dead
- *
- * damagecalculator(&unit attacker, &unit defender)
- *
- *
- */
 
+void Game::abilityMenu()
+{
+    //remove unneeded buttons
+    scene->removeItem(fiteButton);
+    scene->removeItem(itemButton);
+
+    // drawing the buttons
+    circleButton = new Button(QString("Circle"));
+    int cbxPos = 0;
+    int cbyPos = 525;
+    circleButton->setPos(cbxPos,cbyPos);
+    connect(circleButton,SIGNAL(clicked()),this,SLOT(moveCircle()));
+    scene->addItem(circleButton);
+
+    // it used to be items but I changed it to abilities
+    triangleButton = new Button(QString("Triangle"));
+    int tbxPos = 200;
+    int tbyPos = 525;
+    triangleButton->setPos(tbxPos,tbyPos);
+    connect(triangleButton,SIGNAL(clicked()),this,SLOT(moveTriangle()));
+    scene->addItem(triangleButton);
+
+    squareButton = new Button(QString("Square"));
+    int sbxPos = 400;
+    int sbyPos = 525;
+    squareButton->setPos(sbxPos,sbyPos);
+    connect(squareButton,SIGNAL(clicked()),this,SLOT(moveSquare()));
+    scene->addItem(squareButton);
+
+    backButton = new Button(QString("Back"));
+    int bbxPos = 600;
+    int bbyPos = 525;
+    backButton->setPos(bbxPos,bbyPos);
+    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
+    scene->addItem(backButton);
+}
+
+void Game::basicAttack()
+{
+    //remove unneeded buttons
+    scene->removeItem(fiteButton);
+    scene->removeItem(itemButton);
+
+    enemy->changeHealth(-(player->getAP()));
+
+    //shows HP
+    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+    enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
+    enemyHealthText->setDefaultTextColor(Qt::white);
+    enemyHealthText->setFont(QFont("times",16));
+    enemyHealthText->setPos(400, 525);
+    scene->addItem(enemyHealthText);
+
+
+    Game::enemyAttack();
+
+
+    backButton = new Button(QString("Back"));
+    int bbxPos = 600;
+    int bbyPos = 525;
+    backButton->setPos(bbxPos,bbyPos);
+    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
+    scene->addItem(backButton);
+}
+
+void Game::enemyAttack(){
+
+    int enemyAttack = enemy->getAP();
+
+    player->changeHealth(-enemyAttack);
+
+    //shows HP
+    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+    enemyHealthText->setPlainText(QString("Player HP: ") + QString::number(player->getHP()));
+    enemyHealthText->setDefaultTextColor(Qt::white);
+    enemyHealthText->setFont(QFont("times",16));
+    enemyHealthText->setPos(200, 525);
+    scene->addItem(enemyHealthText);
+}
+
+
+
+// Call this function to make the blue GUI rectangle thing have text in it
 void Game::textBox(QString string)
 {
     // draws the blue rectangle for the battle GUI
-    GUI * panel = new GUI(string);
+    panel = new GUI(string);
     connect(panel,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(panel);
 }
@@ -168,11 +227,18 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int le
     enemySprite->setPos(100,100);
     scene->addItem(enemySprite);
 
+    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+    enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
+    enemyHealthText->setDefaultTextColor(Qt::white);
+    enemyHealthText->setFont(QFont("times",16));
+    enemyHealthText->setPos(400, 525);
+    scene->addItem(enemyHealthText);
+
 
 
     enemy->setLVL(level);
     enemy->setHP(getRandomInt(minHP,maxHP));
-    enemy->setAP(getRandomInt(minAP,maxAP));
+    enemy->setAP(getRandomInt(1,maxAP));
     enemy->setTYPE(getRandomInt(1,3));
     enemy->setName(enemyName[randomIndex]);
 

@@ -36,9 +36,4 @@ GUI::GUI(QGraphicsItem *parent)
 void GUI::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     emit clicked();
-    if(text != NULL)
-    {
-        scene()->removeItem(text);
-        delete text;
-    }
 }
