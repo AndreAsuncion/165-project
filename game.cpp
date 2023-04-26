@@ -1,6 +1,4 @@
 #include "game.h"
-#include "button.h"
-#include "gui.h"
 #include "player.h"
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
@@ -53,9 +51,11 @@ void Game::start()
 
 void Game::playerMenu()
 {
+    scene->removeItem(panel);
+
     if(enemy->getHP() >= 0){
         // clearing the GUI of the text
-        GUI * panel = new GUI();
+        panel = new GUI();
         scene->addItem(panel);
 
         // drawing the buttons, there's going to be two a fight and an item button
@@ -73,7 +73,7 @@ void Game::playerMenu()
         itemButton->setPos(ibxPos,ibyPos);
         connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
         connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
-        connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
+    //    connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
     //    connect(this, SIGNAL(enemyDefeated()), this, SLOT(showFightButton())); // new connection
 
         scene->addItem(itemButton);
@@ -126,21 +126,7 @@ void Game::basicAttack()
     scene->removeItem(fiteButton);
     scene->removeItem(itemButton);
 
-    int attackPower = player->getAP();
-    int enemyAttack = enemy->getAP();
-
-    int enemyHealth = enemy->getHP();
-
-    enemyHealth -= attackPower;
-
-    enemy->setHP(enemyHealth);
-
-    int playerHealth = player->getHP();
-
-    playerHealth -= enemyAttack;
-
-    player->setHP(playerHealth);
-
+    enemy->changeHealth(-(player->getAP()));
 
     //shows HP
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
@@ -163,14 +149,10 @@ void Game::basicAttack()
 }
 
 void Game::enemyAttack(){
-    //remove unneeded buttons
-    scene->removeItem(fiteButton);
-    scene->removeItem(itemButton);
-
 
     int enemyAttack = enemy->getAP();
 
-    player->changeHealth(enemyAttack);
+    player->changeHealth(-enemyAttack);
 
     //shows HP
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
@@ -183,11 +165,11 @@ void Game::enemyAttack(){
 
 
 
-
+// Call this function to make the blue GUI rectangle thing have text in it
 void Game::textBox(QString string)
 {
     // draws the blue rectangle for the battle GUI
-    GUI * panel = new GUI(string);
+    panel = new GUI(string);
     connect(panel,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(panel);
 }

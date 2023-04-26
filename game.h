@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include "unit.h"
 #include "button.h"
+#include "gui.h"
 
 class Game: public QGraphicsView
 {
@@ -39,6 +40,7 @@ private:
     Button *triangleButton;
     Button *squareButton;
     Button *backButton;
+    GUI *panel;
     // void drawGUI();
 };
 
