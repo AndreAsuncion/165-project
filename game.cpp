@@ -11,8 +11,8 @@
 #include <QIcon>
 
 Player * player;
-QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png", ":/enemies/horse.png"};
-QList<QString> enemyName = {"ram","vicuna","horse"};
+QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png", ":/enemies/horse.png", ":/enemies/dog.png"};
+QList<QString> enemyName = {"ram","vicuna","horse", "dog"};
 QList<QString> imageBG = {":/backgrounds/BG1.jpg"};
 
 Game::Game(QWidget *parent)
@@ -120,7 +120,7 @@ void Game::startCombat()
 
 Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int level)
 {
-    int randomIndex = getRandomInt(0,1);
+    int randomIndex = getRandomInt(0,(imagePaths.size() - 1));
 
     // draws the background before drawing the enemy sprite
     QGraphicsPixmapItem * enemyBG = new QGraphicsPixmapItem();
