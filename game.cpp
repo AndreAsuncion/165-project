@@ -11,6 +11,7 @@
 #include <QIcon>
 
 Player * player;
+Unit * enemy;
 QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png", ":/enemies/horse.png", ":/enemies/dog.png"};
 QList<QString> enemyName = {"ram","vicuna","horse", "dog"};
 QList<QString> imageBG = {":/backgrounds/BG1.jpg"};
@@ -60,7 +61,7 @@ void Game::playerMenu()
     int fbxPos = 0;
     int fbyPos = 525;
     fiteButton->setPos(fbxPos,fbyPos);
-    connect(fiteButton,SIGNAL(clicked()),this,SLOT(playerAction()));
+    connect(fiteButton,SIGNAL(clicked()),this,SLOT(basicAttack()));
     scene->addItem(fiteButton);
 
     // it used to be items but I changed it to abilities
@@ -74,6 +75,37 @@ void Game::playerMenu()
     // player health
     // QGraphicsTextItem * playerHealth = new QGraphicsTextItem(QString("Work in Progress"));
 }
+
+/*
+ * abilitymenu
+ *
+ * draw gui
+ * draw three buttons
+ * one for each type circle, square, triangle
+ *
+ * or
+ *
+ * basic attack
+ *
+ * after an action is chosen
+ * playerAction starts which
+ * sends a signal to damage calculator
+ * then changes are made to the unit
+ *
+ * after playerAction resolves
+ * start enemyAction
+ * get a random number from the random number method
+ * make the enemy perform a random action based on the number
+ *
+ * after enemyAction resolves
+ * loop back to playerAction
+ *
+ * keep looping until one combatant is dead
+ *
+ * damagecalculator(&unit attacker, &unit defender)
+ *
+ *
+ */
 
 void Game::textBox(QString string)
 {
@@ -114,7 +146,7 @@ void Game::displayMainMenu()
 void Game::startCombat()
 {
     // function creates an enemy based on player's stats
-    Unit * enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 5), player->getAP() - (player->getLVL() * 3), player->getLVL());
+    enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 5), player->getAP() - (player->getLVL() * 3), player->getLVL());
     textBox(QString("A wild %1 is approaching!").arg(enemy->getName()));
 }
 
@@ -130,7 +162,7 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int le
 
 
     // creates new enemy
-    Unit * enemy = new Unit();
+    enemy = new Unit();
     QGraphicsPixmapItem * enemySprite = new QGraphicsPixmapItem();
     enemySprite->setPixmap(imagePaths[randomIndex]);
     enemySprite->setPos(100,100);
