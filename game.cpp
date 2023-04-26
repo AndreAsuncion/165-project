@@ -57,7 +57,7 @@ void Game::playerMenu()
 
     // drawing the buttons, there's going to be two a fight and an item button
     Button * fiteButton = new Button(QString("Fight"));
-    int fbxPos = 25;
+    int fbxPos = 0;
     int fbyPos = 525;
     fiteButton->setPos(fbxPos,fbyPos);
     connect(fiteButton,SIGNAL(clicked()),this,SLOT(playerAction()));
@@ -65,7 +65,7 @@ void Game::playerMenu()
 
     // it used to be items but I changed it to abilities
     Button * itemButton = new Button(QString("Ability"));
-    int ibxPos = 250;
+    int ibxPos = 200;
     int ibyPos = 525;
     itemButton->setPos(ibxPos,ibyPos);
     connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
