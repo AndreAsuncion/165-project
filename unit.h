@@ -17,6 +17,7 @@ public:
     int getAP();
     int getLVL();
     int getTYPE();
+    int getMHP();
     QString getName();
 
     // variable setters
@@ -24,6 +25,7 @@ public:
     void setAP(int x);
     void setLVL(int x);
     void setTYPE(int x);
+    void setMHP(int x);
     void setName(QString string);
 
     // variable modifyers
