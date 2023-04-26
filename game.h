@@ -29,6 +29,7 @@ public slots:
     // these slots will deal with the GUI
     void playerMenu(); // Loads the buttons
     void basicAttack();
+    void enemyAttack();
     void abilityMenu();
     void textBox(QString string); // makes a text box
 private:

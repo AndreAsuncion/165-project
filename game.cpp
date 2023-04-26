@@ -50,33 +50,6 @@ void Game::start()
     startCombat();
 }
 
-//void Game::playerMenu()
-//{
-//    // clearing the GUI of the text
-//    GUI * panel = new GUI();
-//    scene->addItem(panel);
-
-//    // drawing the buttons, there's going to be two a fight and an item button
-//    fiteButton = new Button(QString("Basic Attack"));
-//    int fbxPos = 0;
-//    int fbyPos = 525;
-//    fiteButton->setPos(fbxPos,fbyPos);
-
-//    scene->addItem(fiteButton);
-
-//    // it used to be items but I changed it to abilities
-//    itemButton = new Button(QString("Ability"));
-//    int ibxPos = 200;
-//    int ibyPos = 525;
-//    itemButton->setPos(ibxPos,ibyPos);
-//    connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
-//    connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
-//    connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
-
-//    scene->addItem(itemButton);
-
-//}
-
 
 void Game::playerMenu()
 {
@@ -165,12 +138,15 @@ void Game::basicAttack()
     player->setHP(playerHealth);
 
 
+    //shows HP
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
     enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
     enemyHealthText->setDefaultTextColor(Qt::white);
     enemyHealthText->setFont(QFont("times",16));
     enemyHealthText->setPos(400, 525);
     scene->addItem(enemyHealthText);
+
+    Game::enemyAttack();
 
     backButton = new Button(QString("Back"));
     int bbxPos = 600;
@@ -181,35 +157,35 @@ void Game::basicAttack()
 
 }
 
-//void Game::basicAttack(Unit& enemy)
-//{
-//    //remove unneeded buttons
-//    scene->removeItem(fiteButton);
-//    scene->removeItem(itemButton);
+void Game::enemyAttack(){
+    //remove unneeded buttons
+    scene->removeItem(fiteButton);
+    scene->removeItem(itemButton);
 
-//    int attackPower = player->getAP();
-//    int enemyAttack = enemy.getAP();
 
-//    int enemyHealth = enemy.getHP();
-
-//    enemyHealth -= attackPower;
-
-//    enemy.setHP(enemyHealth);
+    int enemyAttack = enemy->getAP();
 
 //    int playerHealth = player->getHP();
 
-//    playerHealth -= enemyAttack;
+
+//    playerHealth -= (enemyAttack*-1);
+
+
+    player->changeHealth(enemyAttack);
 
 //    player->setHP(playerHealth);
 
 
-//    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
-//    enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy.getHP()));
-//    enemyHealthText->setDefaultTextColor(Qt::white);
-//    enemyHealthText->setFont(QFont("times",16));
-//    enemyHealthText->setPos(400, 525);
-//    scene->addItem(enemyHealthText);
-//}
+    //shows HP
+    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+    enemyHealthText->setPlainText(QString("Player HP: ") + QString::number(player->getHP()));
+    enemyHealthText->setDefaultTextColor(Qt::white);
+    enemyHealthText->setFont(QFont("times",16));
+    enemyHealthText->setPos(200, 525);
+    scene->addItem(enemyHealthText);
+}
+
+
 
 
 void Game::textBox(QString string)
@@ -273,11 +249,18 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int le
     enemySprite->setPos(100,100);
     scene->addItem(enemySprite);
 
+    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+    enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
+    enemyHealthText->setDefaultTextColor(Qt::white);
+    enemyHealthText->setFont(QFont("times",16));
+    enemyHealthText->setPos(400, 525);
+    scene->addItem(enemyHealthText);
+
 
 
     enemy->setLVL(level);
     enemy->setHP(getRandomInt(minHP,maxHP));
-    enemy->setAP(getRandomInt(minAP,maxAP));
+    enemy->setAP(getRandomInt(1,maxAP));
     enemy->setTYPE(getRandomInt(1,3));
     enemy->setName(enemyName[randomIndex]);
 
