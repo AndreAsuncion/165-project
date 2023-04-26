@@ -11,8 +11,8 @@
 #include <QIcon>
 
 Player * player;
-QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png", ":/enemies/horse.png"};
-QList<QString> enemyName = {"ram","vicuna","horse"};
+QList<QString> imagePaths = {":/enemies/ram.png",":/enemies/vicuna.png", ":/enemies/horse.png", ":/enemies/dog.png"};
+QList<QString> enemyName = {"ram","vicuna","horse", "dog"};
 QList<QString> imageBG = {":/backgrounds/BG1.jpg"};
 
 Game::Game(QWidget *parent)
@@ -57,7 +57,7 @@ void Game::playerMenu()
 
     // drawing the buttons, there's going to be two a fight and an item button
     Button * fiteButton = new Button(QString("Fight"));
-    int fbxPos = 25;
+    int fbxPos = 0;
     int fbyPos = 525;
     fiteButton->setPos(fbxPos,fbyPos);
     connect(fiteButton,SIGNAL(clicked()),this,SLOT(playerAction()));
@@ -65,7 +65,7 @@ void Game::playerMenu()
 
     // it used to be items but I changed it to abilities
     Button * itemButton = new Button(QString("Ability"));
-    int ibxPos = 250;
+    int ibxPos = 200;
     int ibyPos = 525;
     itemButton->setPos(ibxPos,ibyPos);
     connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
@@ -120,7 +120,7 @@ void Game::startCombat()
 
 Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int level)
 {
-    int randomIndex = getRandomInt(0,1);
+    int randomIndex = getRandomInt(0,(imagePaths.size() - 1));
 
     // draws the background before drawing the enemy sprite
     QGraphicsPixmapItem * enemyBG = new QGraphicsPixmapItem();
