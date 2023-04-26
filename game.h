@@ -27,6 +27,7 @@ public slots:
 
     // these slots will deal with the GUI
     void playerMenu(); // Loads the buttons
+    void playerAction(){};
     void textBox(QString string); // makes a text box
 private:
     // void drawGUI();
