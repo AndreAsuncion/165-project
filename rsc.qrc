@@ -3,6 +3,7 @@
         <file>ram.png</file>
         <file>vicuna.png</file>
         <file>horse.png</file>
+        <file>dog.png</file>
     </qresource>
     <qresource prefix="/backgrounds">
         <file>BG1.jpg</file>
