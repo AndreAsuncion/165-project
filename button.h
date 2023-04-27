@@ -10,6 +10,7 @@ class Button: public QObject, public QGraphicsRectItem
 public:
     // constructor
     Button(QString string, QGraphicsItem* parent=NULL);
+    Button(int x, QString string, QGraphicsItem* parent=NULL);
 
     //public methods
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -17,8 +18,10 @@ public:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 signals:
     void clicked();
+    void clicked(int buttonType);
 private:
     QGraphicsTextItem * text;
+    int type;
 };
 
 #endif // BUTTON_H

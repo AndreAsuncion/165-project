@@ -17,22 +17,25 @@ public:
     // public methods
     void displayMainMenu();
     void startCombat();
+    void textBox(QString string); // makes a text box containt the passed string
+    int damageCalc(int x, Unit* defender);
     int getRandomInt(int min, int max); // randomizer
 
     //public attributes
     QGraphicsScene * scene;
 
-    // something
-    Unit* createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int level);
+    // does it what says
+    Unit* createRandomEnemy(int minHP, int maxHP, int maxAP, int level);
 public slots:
     void start();
 
     // these slots will deal with the GUI
     void playerMenu(); // Loads the buttons
-    void basicAttack();
     void enemyAttack();
     void abilityMenu();
-    void textBox(QString string); // makes a text box
+    void playerAction(int x);
+    void menuNav(int x);
+    //void playerAction(); was for testing purposes
 private:
     Button *fiteButton;
     Button *itemButton;
@@ -41,7 +44,6 @@ private:
     Button *squareButton;
     Button *backButton;
     GUI *panel;
-    // void drawGUI();
 };
 
 #endif // GAME_H

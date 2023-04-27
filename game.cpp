@@ -7,6 +7,7 @@
 #include <QPixmap>
 #include <QList>
 #include <QIcon>
+#include <QDebug>
 
 Player * player;
 Unit * enemy;
@@ -27,7 +28,6 @@ Game::Game(QWidget *parent)
     scene = new QGraphicsScene();
     scene->setSceneRect(0,0,800,600);
     setScene(scene);
-
 }
 
 int Game::getRandomInt(int min, int max)
@@ -53,33 +53,20 @@ void Game::playerMenu()
 {
     scene->removeItem(panel);
 
-    if(enemy->getHP() >= 0){
-        // clearing the GUI of the text
-        panel = new GUI();
-        scene->addItem(panel);
+    panel = new GUI();
+    scene->addItem(panel);
 
-        // drawing the buttons, there's going to be two a fight and an item button
-        fiteButton = new Button(QString("Basic Attack"));
-        int fbxPos = 0;
-        int fbyPos = 525;
-        fiteButton->setPos(fbxPos,fbyPos);
+    // drawing the buttons, there's going to be two a fight and an item button
+    fiteButton = new Button(1, QString("Basic Attack"));
+    fiteButton->setPos(0, 525);
+    connect(fiteButton, SIGNAL(clicked(int)), this, SLOT(playerAction(int)));
+    scene->addItem(fiteButton);
 
-        scene->addItem(fiteButton);
-
-        // it used to be items but I changed it to abilities
-        itemButton = new Button(QString("Ability"));
-        int ibxPos = 200;
-        int ibyPos = 525;
-        itemButton->setPos(ibxPos,ibyPos);
-        connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
-        connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
-    //    connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
-    //    connect(this, SIGNAL(enemyDefeated()), this, SLOT(showFightButton())); // new connection
-
-        scene->addItem(itemButton);
-    } else{
-        startCombat();
-    }
+    // it used to be items but I changed it to abilities
+    itemButton = new Button(QString("Ability"));
+    itemButton->setPos(200,525);
+    connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
+    scene->addItem(itemButton);
 }
 
 
@@ -90,45 +77,88 @@ void Game::abilityMenu()
     scene->removeItem(itemButton);
 
     // drawing the buttons
-    circleButton = new Button(QString("Circle"));
-    int cbxPos = 0;
-    int cbyPos = 525;
-    circleButton->setPos(cbxPos,cbyPos);
-    connect(circleButton,SIGNAL(clicked()),this,SLOT(moveCircle()));
+    circleButton = new Button(2, QString("Circle"));
+    circleButton->setPos(0,525);
+    connect(circleButton,SIGNAL(clicked(int)), this, SLOT(playerAction(int)));
     scene->addItem(circleButton);
 
-    // it used to be items but I changed it to abilities
-    triangleButton = new Button(QString("Triangle"));
-    int tbxPos = 200;
-    int tbyPos = 525;
-    triangleButton->setPos(tbxPos,tbyPos);
-    connect(triangleButton,SIGNAL(clicked()),this,SLOT(moveTriangle()));
+    triangleButton = new Button(3, QString("Triangle"));
+    triangleButton->setPos(200,525);
+    connect(triangleButton,SIGNAL(clicked(int)), this, SLOT(playerAction(int)));
     scene->addItem(triangleButton);
 
-    squareButton = new Button(QString("Square"));
-    int sbxPos = 400;
-    int sbyPos = 525;
-    squareButton->setPos(sbxPos,sbyPos);
-    connect(squareButton,SIGNAL(clicked()),this,SLOT(moveSquare()));
+    squareButton = new Button(4, QString("Square"));
+    squareButton->setPos(400,525);
+    connect(squareButton,SIGNAL(clicked(int)), this, SLOT(playerAction(int)));
     scene->addItem(squareButton);
 
     backButton = new Button(QString("Back"));
-    int bbxPos = 600;
-    int bbyPos = 525;
-    backButton->setPos(bbxPos,bbyPos);
+    backButton->setPos(600,525);
     connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(backButton);
 }
 
-void Game::basicAttack()
+//The following button should go to enemyAction
+
+//    backButton = new Button(QString("Back"));
+//    int bbxPos = 600;
+//    int bbyPos = 525;
+//    backButton->setPos(bbxPos,bbyPos);
+//    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
+//    scene->addItem(backButton);
+
+int Game::damageCalc(int x, Unit* defender)
 {
-    //remove unneeded buttons
-    scene->removeItem(fiteButton);
-    scene->removeItem(itemButton);
+    // rock paper scissors
+    // circle == 2, powerful to square, weak to triangle
+    // triangle == 3, powerful to circle, weak to square
+    // square == 4, powerful to triangle, weak to circle
 
-    enemy->changeHealth(-(player->getAP()));
+    //qDebug() << x << " type attack was used";
 
-    //shows HP
+    int type = defender->getTYPE();
+
+    //qDebug() << type;
+    //int damage = player->getAP();
+    if(x == type)
+    {
+        return player->getAP();
+    }
+    else if((x == 2 && type == 4) || (x == 3 && type == 2) || (x == 4 && type == 3))
+    {
+        //qDebug() << x << " attack was very effective!";
+        return (player->getAP() * 2);
+    }
+    else if((x == 2 && type == 3) || (x == 3 && type == 4) || (x == 4 && type == 2))
+    {
+        //qDebug() << x << " attack wasn't very effective!";
+        return (player->getAP() / 2);
+    }
+
+    return player->getAP();
+}
+
+void Game::playerAction(int x)
+{
+    // GUI cleanup
+    if(x == 1)
+    {
+        scene->removeItem(fiteButton);
+        scene->removeItem(itemButton);
+    }
+    else
+    {
+        scene->removeItem(circleButton);
+        scene->removeItem(triangleButton);
+        scene->removeItem(squareButton);
+        scene->removeItem(backButton);
+    }
+
+    //int damage = -(damageCalc(x,enemy));
+    //qDebug() << damage << " was dealt";
+
+    enemy->changeHealth(-(damageCalc(x,enemy)));
+
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
     enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
     enemyHealthText->setDefaultTextColor(Qt::white);
@@ -136,23 +166,12 @@ void Game::basicAttack()
     enemyHealthText->setPos(400, 525);
     scene->addItem(enemyHealthText);
 
-
     Game::enemyAttack();
-
-
-    backButton = new Button(QString("Back"));
-    int bbxPos = 600;
-    int bbyPos = 525;
-    backButton->setPos(bbxPos,bbyPos);
-    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
-    scene->addItem(backButton);
 }
 
-void Game::enemyAttack(){
-
-    int enemyAttack = enemy->getAP();
-
-    player->changeHealth(-enemyAttack);
+void Game::enemyAttack()
+{
+    player->changeHealth(-enemy->getAP());
 
     //shows HP
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
@@ -161,23 +180,41 @@ void Game::enemyAttack(){
     enemyHealthText->setFont(QFont("times",16));
     enemyHealthText->setPos(200, 525);
     scene->addItem(enemyHealthText);
+
+    backButton = new Button(QString("Continue"));
+    int bbxPos = 600;
+    int bbyPos = 525;
+    backButton->setPos(bbxPos,bbyPos);
+    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
+    scene->addItem(backButton);
+
+    // check if playerhp < 0
+    // if that is the case
+    // start the failstate method
 }
-
-
 
 // Call this function to make the blue GUI rectangle thing have text in it
 void Game::textBox(QString string)
 {
     // draws the blue rectangle for the battle GUI
-    panel = new GUI(string);
-    connect(panel,SIGNAL(clicked()),this,SLOT(playerMenu()));
+    panel = new GUI(1, string);
+    connect(panel,SIGNAL(clicked(int)),this,SLOT(menuNav(int)));
     scene->addItem(panel);
+}
+
+void Game::menuNav(int x)
+{
+    qDebug() << "hi";
+    switch(x)
+    {
+    case(1): playerMenu();
+    }
 }
 
 void Game::displayMainMenu()
 {
     // print title
-    QGraphicsTextItem * titleText = new QGraphicsTextItem(QString("Animal Abuse"));
+    QGraphicsTextItem * titleText = new QGraphicsTextItem(QString("Animal Fight Club"));
     QFont titleFont("impact", 50);
     titleText->setFont(titleFont);
     int ttxPos = this->width()/2 - titleText->boundingRect().width()/2;
@@ -205,11 +242,13 @@ void Game::displayMainMenu()
 void Game::startCombat()
 {
     // function creates an enemy based on player's stats
-    enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 5), player->getAP() - (player->getLVL() * 3), player->getLVL());
+    enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 3), player->getLVL());
     textBox(QString("A wild %1 is approaching!").arg(enemy->getName()));
+
+    qDebug() << enemy->getTYPE();
 }
 
-Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int level)
+Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
 {
     int randomIndex = getRandomInt(0,(imagePaths.size() - 1));
 
@@ -217,8 +256,6 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int le
     QGraphicsPixmapItem * enemyBG = new QGraphicsPixmapItem();
     enemyBG->setPixmap(imageBG[level-1]);
     scene->addItem(enemyBG);
-
-
 
     // creates new enemy
     enemy = new Unit();
@@ -234,12 +271,10 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int minAP, int maxAP, int le
     enemyHealthText->setPos(400, 525);
     scene->addItem(enemyHealthText);
 
-
-
     enemy->setLVL(level);
     enemy->setHP(getRandomInt(minHP,maxHP));
     enemy->setAP(getRandomInt(1,maxAP));
-    enemy->setTYPE(getRandomInt(1,3));
+    enemy->setTYPE(getRandomInt(2,4));
     enemy->setName(enemyName[randomIndex]);
 
     return enemy;
