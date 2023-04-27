@@ -17,7 +17,7 @@ public:
     // public methods
     void displayMainMenu();
     void startCombat();
-    void textBox(int x, QString string); // makes a text box that contains the passed string
+    void textBox(QString string); // makes a text box containt the passed string
     int damageCalc(int x, Unit* defender);
     int getRandomInt(int min, int max); // randomizer
 
@@ -35,6 +35,7 @@ public slots:
     void abilityMenu();
     void playerAction(int x);
     void menuNav(int x);
+    void gameOver();
     //void playerAction(); was for testing purposes
 private:
     Button *fiteButton;
@@ -43,7 +44,6 @@ private:
     Button *triangleButton;
     Button *squareButton;
     Button *backButton;
-    Button *testButton;
     GUI *panel;
 };
 
