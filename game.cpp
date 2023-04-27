@@ -179,7 +179,6 @@ void Game::playerAction(int x)
             player->setLVL( (player->getLVL()+expGained) );
             textBox(2, QString("XP Gained: %1").arg(expGained));
         }
-
     }
 }
 
@@ -200,7 +199,26 @@ void Game::enemyAttack()
 
 void Game::endCombat()
 {
-    startCombat();
+    int expGained = enemy->getLVL();
+    if(enemy->getLVL() > player->getLVL())
+    {
+        expGained = (expGained + ((enemy->getLVL() - player->getLVL())/2));
+        player->changeXP(expGained);
+    }
+
+    player->changeXP(expGained);
+
+    if(player->getXP() > (player->getMHP()/10))
+    {
+        textBox(8, QString("XP Gained: %1").arg(expGained));
+    }
+
+    textBox(2, QString("XP Gained: %1").arg(expGained));
+}
+
+void Game::levelUp()
+{
+
 }
 
 void Game::gameOver(){
@@ -265,6 +283,10 @@ void Game::menuNav(int x)
         break;
     case(7):
         gameOver();
+        break;
+    case(8):
+        levelUp();
+        break;
     }
 }
 
@@ -299,11 +321,11 @@ void Game::displayMainMenu()
 void Game::startCombat()
 {
     // function creates an enemy based on player's stats
-    enemy = createRandomEnemy(player->getMHP() - 3, player->getMHP(), player->getAP() - 3, player->getLVL());
+    enemy = createRandomEnemy(player->getMHP() - 3, player->getMHP(), player->getLVL() - 2, (player->getLVL() + 2));
     textBox(1, QString("A wild %1 is approaching!").arg(enemy->getName()));
 }
 
-Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
+Unit *Game::createRandomEnemy(int minHP, int maxHP, int minLvl, int maxLvl)
 {
     int randomIndex = getRandomInt(0,(imagePaths.size() - 1));
     //int imageIndex = (player->getLVL() > 25) ? 5 : ((player->getLVL()-1) / 5);
@@ -323,9 +345,9 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
     scene->addItem(enemySprite);
 
     // setting the members of enemy
-    enemy->setLVL(level);
+    enemy->setLVL(getRandomInt(minLvl,maxLvl));
     enemy->setMHP(getRandomInt(minHP+1,maxHP));
-    enemy->setAP(getRandomInt(1,maxAP));
+    enemy->setAP(getRandomInt(1,enemy->getLVL()));
     enemy->setTYPE(getRandomInt(2,4));
     enemy->setName(enemyName[randomIndex]);
 

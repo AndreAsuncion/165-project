@@ -30,6 +30,7 @@ public:
     void textBox(int x, QString string); // makes a text box that contains the passed string
     void gameOver();
     void endCombat();
+    void levelUp();
     int damageCalc(int x, Unit* defender);
     int getRandomInt(int min, int max); // randomizer
 
@@ -37,7 +38,7 @@ public:
     QGraphicsScene * scene;
 
     // does it what says
-    Unit* createRandomEnemy(int minHP, int maxHP, int maxAP, int level);
+    Unit* createRandomEnemy(int minHP, int maxHP, int minLvl, int maxLvl);
 public slots:
     void start();
 
