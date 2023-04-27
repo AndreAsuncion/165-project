@@ -203,13 +203,10 @@ void Game::enemyAttack()
     connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(backButton);
 
-    if(player->getHP() <= 0){
-        Game::gameOver();
-    }
 
-    // check if playerhp < 0
-    // if that is the case
-    // start the failstate method
+    if(player->getHP() <= 0){
+        gameOver();
+    }
 }
 
 void Game::gameOver(){
@@ -301,10 +298,11 @@ void Game::startCombat()
 Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
 {
     int randomIndex = getRandomInt(0,(imagePaths.size() - 1));
+    int imageIndex = (player->getLVL() > 25) ? 5 : ((player->getLVL()-1) / 5);
 
     // draws the background before drawing the enemy sprite
     QGraphicsPixmapItem * enemyBG = new QGraphicsPixmapItem();
-    enemyBG->setPixmap(imageBG[0]);
+    enemyBG->setPixmap(imageBG[imageIndex]);
     scene->addItem(enemyBG);
 
     // creates new enemy
