@@ -188,7 +188,7 @@ void Game::enemyAttack()
 {
     if(enemy->getHP() <= 0)
     {
-        qDebug() << "animal dead";
+        // qDebug() << "animal dead";
         textBox(6, QString("%1 was defeated").arg(enemy->getName()));
         return;
     }
