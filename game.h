@@ -20,6 +20,7 @@ public:
     void textBox(int x, QString string); // makes a text box that contains the passed string
     int damageCalc(int x, Unit* defender);
     int getRandomInt(int min, int max); // randomizer
+    void gameOver();
 
     //public attributes
     QGraphicsScene * scene;

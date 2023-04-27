@@ -136,18 +136,18 @@ int Game::damageCalc(int x, Unit* defender)
 
 void Game::playerAction(int x)
 {
-    if (enemy->getHP() < 0) {
+    if (enemy->getHP() <= 1) {
 
         if(enemy->getLVL() > player->getLVL()){
-            int expGained = ( (enemy->getLVL() * 2 ) + player->getLVL() );
-            player->setLVL(expGained);
+            int expGained = ( (enemy->getLVL() + 2 ) );
+            player->setLVL((player->getLVL()+expGained));
 
 
             textBox(2, QString("XP Gained: %1").arg(expGained));
         }
         else {
-            int expGained = ( (enemy->getLVL() * 1 ) + player->getLVL() );
-            player->setLVL(expGained);
+            int expGained = (enemy->getLVL() );
+            player->setLVL( (player->getLVL()+expGained) );
             textBox(2, QString("XP Gained: %1").arg(expGained));
         }
 
@@ -203,9 +203,39 @@ void Game::enemyAttack()
     connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(backButton);
 
+    if(player->getHP() <= 0){
+        Game::gameOver();
+    }
+
     // check if playerhp < 0
     // if that is the case
     // start the failstate method
+}
+
+void Game::gameOver(){
+    scene->clear();
+
+    QGraphicsTextItem * titleText = new QGraphicsTextItem(QString("Game Over"));
+    QFont titleFont("impact", 50);
+    titleText->setFont(titleFont);
+    int ttxPos = this->width()/2 - titleText->boundingRect().width()/2;
+    int ttyPos = 150;
+    titleText->setPos(ttxPos,ttyPos);
+    scene->addItem(titleText);
+
+    Button * playButton = new Button(QString("Restart"));
+    int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
+    int byPos = 275;
+    playButton->setPos(bxPos,byPos);
+    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+    scene->addItem(playButton);
+
+    Button * quitButton = new Button(QString("Quit"));
+    int qxPos = this->width()/2 - quitButton->boundingRect().width()/2;
+    int qyPos = 350;
+    quitButton->setPos(qxPos,qyPos);
+    connect(quitButton,SIGNAL(clicked()),this,SLOT(close()));
+    scene->addItem(quitButton);
 }
 
 // Call this function to make the blue GUI rectangle thing have text in it
@@ -224,8 +254,12 @@ void Game::menuNav(int x)
 
     switch(x)
     {
-    case(1): playerMenu();
-    case(2): startCombat();
+    case(1):
+        playerMenu();
+        break;
+    case(2):
+        startCombat();
+        break;
     }
 }
 
@@ -260,7 +294,7 @@ void Game::displayMainMenu()
 void Game::startCombat()
 {
     // function creates an enemy based on player's stats
-    enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 3), player->getLVL());
+    enemy = createRandomEnemy(player->getMHP() - (player->getLVL() * 3), player->getMHP(), player->getAP() - (player->getLVL() * 3), player->getLVL());
     textBox(1, QString("A wild %1 is approaching!").arg(enemy->getName()));
 }
 
@@ -270,7 +304,7 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
 
     // draws the background before drawing the enemy sprite
     QGraphicsPixmapItem * enemyBG = new QGraphicsPixmapItem();
-    enemyBG->setPixmap(imageBG[level-1]);
+    enemyBG->setPixmap(imageBG[0]);
     scene->addItem(enemyBG);
 
     // creates new enemy
@@ -288,7 +322,7 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
     scene->addItem(enemyHealthText);
 
     enemy->setLVL(level);
-    enemy->setHP(getRandomInt(minHP,maxHP));
+    enemy->setHP(getRandomInt(minHP*2,maxHP));
     enemy->setAP(getRandomInt(1,maxAP));
     enemy->setTYPE(getRandomInt(2,4));
     enemy->setName(enemyName[randomIndex]);
