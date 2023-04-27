@@ -143,32 +143,15 @@ void Game::playerAction(int x)
             player->setLVL(expGained);
 
 
-            textBox(1, QString("XP Gained: %1").arg(expGained));
+            textBox(2, QString("XP Gained: %1").arg(expGained));
         }
         else {
             int expGained = ( (enemy->getLVL() * 1 ) + player->getLVL() );
             player->setLVL(expGained);
-
-
-            textBox(1, QString("XP Gained: %1").arg(expGained));
+            textBox(2, QString("XP Gained: %1").arg(expGained));
         }
 
-
     }
-
-
-//    if(enemy->getHP() < 1){
-//        int eLVL = enemy->getLVL();
-//        if(eLVL > player->getLVL()){
-//            int lvlGained = (eLVL);
-//            player->setLVL( (eLVL) + player->getLVL() );
-//        } else {
-//            int lvlGained = (eLVL/2);
-
-//            player->setLVL( (eLVL/2) + player->getLVL() );
-//        }
-//        startCombat();
-//    }
     else {
         // GUI cleanup
         if(x == 1)
@@ -199,13 +182,6 @@ void Game::playerAction(int x)
 
 
 }
-
-//void getXpPrompt(int x, QString string){
-//    panel = new GUI(x, string);
-//    connect(panel,SIGNAL(clicked(int)),this,SLOT(menuNav(int)));
-//    scene->addItem(panel);
-
-//}
 
 
 void Game::enemyAttack()
@@ -249,7 +225,7 @@ void Game::menuNav(int x)
     switch(x)
     {
     case(1): playerMenu();
-//    case(2):
+    case(2): startCombat();
     }
 }
 
