@@ -15,7 +15,7 @@ GUI::GUI(int x, QString string, QGraphicsItem *parent) :QGraphicsRectItem(parent
     text = new QGraphicsTextItem(string,this);
     text->setFont(QFont("impact", 40));
     int xPos = rect().width()/2 - text->boundingRect().width()/2;
-    int yPos = 510;
+    int yPos = 500;
     text->setPos(xPos,yPos);
 }
 

@@ -28,16 +28,17 @@ public:
     void displayMainMenu();
     void startCombat();
     void textBox(int x, QString string); // makes a text box that contains the passed string
+    void gameOver();
+    void endCombat();
+    void levelUp();
     int damageCalc(int x, Unit* defender);
     int getRandomInt(int min, int max); // randomizer
-    void gameOver();
 
     //public attributes
     QGraphicsScene * scene;
-    QGraphicsTextItem * playerHealthText;
 
     // does it what says
-    Unit* createRandomEnemy(int minHP, int maxHP, int maxAP, int level);
+    Unit* createRandomEnemy(int minHP, int maxHP, int maxLvl);
 public slots:
     void start();
 
@@ -47,7 +48,6 @@ public slots:
     void abilityMenu();
     void playerAction(int x);
     void menuNav(int x);
-    void gameOver();
     //void playerAction(); was for testing purposes
 private:
     Button *fiteButton;
@@ -59,6 +59,7 @@ private:
     Button *testButton;
     GUI *panel;
     healthTracker *enemyHealthText;
+    healthTracker *playerHealthText;
 };
 
 #endif // GAME_H

@@ -12,8 +12,15 @@ int Player::getXP()
     return this->experiencePoints;
 }
 
+// variable setter
+void Player::setXP(int x)
+{
+    experiencePoints = x;
+}
+
 // variable modifyer
 void Player::changeXP(int x)
 {
     experiencePoints += x;
+    score += x;
 }

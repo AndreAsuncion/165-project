@@ -49,6 +49,7 @@ QString Unit::getName()
 void Unit::setHP(int x)
 {
     healthPoints = x;
+    emit healthChanged();
 }
 
 void Unit::setAP(int x)
@@ -70,6 +71,7 @@ void Unit::setMHP(int x)
 {
     maxHealthPoints = x;
     healthPoints = x;
+    emit healthChanged();
 }
 
 void Unit::setName(QString string)
@@ -83,8 +85,11 @@ void Unit::changeHealth(int x)
     // int x will be negative for damage, positive for healing
     healthPoints += x;
 
+    // qDebug() << "changed " << x;
+
     if(healthPoints > maxHealthPoints)
+    {
         healthPoints = maxHealthPoints;
-    else if(healthPoints < 0)
-        healthPoints = 0;
+    }
+    emit healthChanged();
 }

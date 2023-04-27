@@ -3,7 +3,7 @@
 healthTracker::healthTracker(Unit *unit, QGraphicsItem *parent) : QGraphicsRectItem(parent), unit(unit)
 {
     // the box holding the numbers
-    setRect(0,0,200,50);
+    setRect(0,0,150,50);
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::black);
@@ -16,6 +16,8 @@ healthTracker::healthTracker(Unit *unit, QGraphicsItem *parent) : QGraphicsRectI
     int xPos = rect().width()/2 - text->boundingRect().width()/2;
     int yPos = rect().height()/2 - text->boundingRect().height()/2;
     text->setPos(xPos,yPos);
+
+    connect(unit, &Unit::healthChanged, this, &healthTracker::updateText);
 }
 
 void healthTracker::updateText()

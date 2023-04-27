@@ -1,7 +1,9 @@
 TEMPLATE = app
-TARGET = "Animal Fight Club"
+TARGET = "AnimalFightClub"
 
 QT = core gui
+
+RC_ICONS = icon.ico
 
 greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
 
