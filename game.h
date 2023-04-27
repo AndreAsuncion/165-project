@@ -28,9 +28,10 @@ public:
     void displayMainMenu();
     void startCombat();
     void textBox(int x, QString string); // makes a text box that contains the passed string
+    void gameOver();
+    void endCombat();
     int damageCalc(int x, Unit* defender);
     int getRandomInt(int min, int max); // randomizer
-    void gameOver();
 
     //public attributes
     QGraphicsScene * scene;

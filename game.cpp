@@ -188,12 +188,19 @@ void Game::enemyAttack()
 {
     if(enemy->getHP() <= 0)
     {
-        textBox(6, QString("%1 was defeated"));
+        qDebug() << "animal dead";
+        textBox(6, QString("%1 was defeated").arg(enemy->getName()));
+        return;
     }
 
     player->changeHealth(-enemy->getAP());
 
     textBox(1, QString("%1 attacked dealing %2 damage!").arg(enemy->getName()).arg(enemy->getAP()));
+}
+
+void Game::endCombat()
+{
+    startCombat();
 }
 
 void Game::gameOver(){
@@ -254,7 +261,7 @@ void Game::menuNav(int x)
         textBox(3, QString("It was not very effective..."));
         break;
     case(6):
-        //endCombat();
+        endCombat();
         break;
     case(7):
         gameOver();
