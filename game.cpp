@@ -29,11 +29,15 @@ int Game::getRandomInt(int min, int max)
 
 void Game::start()
 {
-    // initializing player at the start, lvl 1, base stats
-    player = new Player();
-
     // clearing the scene
     scene->clear();
+
+    // initializing player at the start, lvl 1, base stats
+    player = new Player();
+    playerHealthText = new healthTracker(player);
+    playerHealthText->setPos(0,450);
+    playerHealthText->setZValue(1000);
+    scene->addItem(playerHealthText);
 
     // starts first instance of game/combat
     startCombat();
@@ -138,6 +142,9 @@ void Game::playerAction(int x)
     }
 
     int damage = damageCalc(x,enemy);
+
+    // qDebug() << "dealt " << damage;
+
     QString message = QString("You dealt %1 damage to %2").arg(damage).arg(enemy->getName());
     enemy->changeHealth(-damage);
 
@@ -317,7 +324,7 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
 
     // health tracker
     enemyHealthText = new healthTracker(enemy);
-    enemyHealthText->setPos(400,0);
+    enemyHealthText->setPos(650,0);
     scene->addItem(enemyHealthText);
 
     return enemy;

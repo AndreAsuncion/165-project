@@ -4,6 +4,10 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QFont>
+#include <QDebug>
+#include <QGraphicsTextItem>
+#include <QGraphicsRectItem>
+#include <QBrush>
 
 class Unit: public QObject, public QGraphicsPixmapItem
 {
@@ -31,6 +35,8 @@ public:
 
     // variable modifyers
     void changeHealth(int x);
+signals:
+    void healthChanged();
 private:
     int maxHealthPoints, healthPoints, attackPower, level, type;
     QString name;

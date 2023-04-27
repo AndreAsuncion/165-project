@@ -34,7 +34,6 @@ public:
 
     //public attributes
     QGraphicsScene * scene;
-    QGraphicsTextItem * playerHealthText;
 
     // does it what says
     Unit* createRandomEnemy(int minHP, int maxHP, int maxAP, int level);
@@ -58,6 +57,7 @@ private:
     Button *testButton;
     GUI *panel;
     healthTracker *enemyHealthText;
+    healthTracker *playerHealthText;
 };
 
 #endif // GAME_H
