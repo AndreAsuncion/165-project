@@ -12,10 +12,14 @@ public:
     // variable getter
     int getXP();
 
+    // variable setter
+    void setXP(int x);
+
     // variable modifyer
     void changeXP(int x);
 private:
     int experiencePoints;
+    int score;
 };
 
 #endif // PLAYER_H

@@ -164,22 +164,22 @@ void Game::playerAction(int x)
         return;
     }
 
+//    if (enemy->getHP() <= 1) {
 
-    if (enemy->getHP() <= 1) {
-
-        if(enemy->getLVL() > player->getLVL()){
-            int expGained = ( (enemy->getLVL() + 2 ) );
-            player->setLVL((player->getLVL()+expGained));
+//        if(enemy->getLVL() > player->getLVL()){
+//            int expGained = ( (enemy->getLVL() + 2 ) );
+//            player->setLVL((player->getLVL()+expGained));
 
 
-            textBox(2, QString("XP Gained: %1").arg(expGained));
-        }
-        else {
-            int expGained = (enemy->getLVL() );
-            player->setLVL( (player->getLVL()+expGained) );
-            textBox(2, QString("XP Gained: %1").arg(expGained));
-        }
-    }
+//            textBox(2, QString("XP Gained: %1").arg(expGained));
+//        }
+//        else {
+//            int expGained = (enemy->getLVL() );
+//            player->setLVL( (player->getLVL()+expGained) );
+//            textBox(2, QString("XP Gained: %1").arg(expGained));
+//        }
+//    }
+
 }
 
 
@@ -199,7 +199,7 @@ void Game::enemyAttack()
 
 void Game::endCombat()
 {
-    int expGained = enemy->getLVL();
+    int expGained = (enemy->getMHP()/3);
     if(enemy->getLVL() > player->getLVL())
     {
         expGained = (expGained + ((enemy->getLVL() - player->getLVL())/2));
@@ -208,9 +208,13 @@ void Game::endCombat()
 
     player->changeXP(expGained);
 
-    if(player->getXP() > (player->getMHP()/10))
+    qDebug() << player->getXP();
+
+    if(player->getXP() >= (player->getMHP()/2))
     {
+        qDebug() << "level up";
         textBox(8, QString("XP Gained: %1").arg(expGained));
+        return;
     }
 
     textBox(2, QString("XP Gained: %1").arg(expGained));
@@ -218,7 +222,15 @@ void Game::endCombat()
 
 void Game::levelUp()
 {
+    player->setXP(0);
 
+    int maxHealthPoints = player->getMHP(); // easy of reading
+    int attackPower = player->getAP();
+
+    player->setMHP((maxHealthPoints + getRandomInt((maxHealthPoints/10),(100/maxHealthPoints))));
+    player->setAP((attackPower + getRandomInt(0,3)));
+
+    textBox(2, QString("You leveled up!"));
 }
 
 void Game::gameOver(){
@@ -321,11 +333,11 @@ void Game::displayMainMenu()
 void Game::startCombat()
 {
     // function creates an enemy based on player's stats
-    enemy = createRandomEnemy(player->getMHP() - 3, player->getMHP(), player->getLVL() - 2, (player->getLVL() + 2));
+    enemy = createRandomEnemy(player->getMHP() - 3, player->getMHP(), player->getLVL());
     textBox(1, QString("A wild %1 is approaching!").arg(enemy->getName()));
 }
 
-Unit *Game::createRandomEnemy(int minHP, int maxHP, int minLvl, int maxLvl)
+Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxLvl)
 {
     int randomIndex = getRandomInt(0,(imagePaths.size() - 1));
     //int imageIndex = (player->getLVL() > 25) ? 5 : ((player->getLVL()-1) / 5);
@@ -345,9 +357,9 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int minLvl, int maxLvl)
     scene->addItem(enemySprite);
 
     // setting the members of enemy
-    enemy->setLVL(getRandomInt(minLvl,maxLvl));
-    enemy->setMHP(getRandomInt(minHP+1,maxHP));
-    enemy->setAP(getRandomInt(1,enemy->getLVL()));
+    enemy->setLVL(getRandomInt(1,maxLvl));
+    enemy->setMHP(getRandomInt(minHP,maxHP));
+    enemy->setAP(getRandomInt(enemy->getLVL(),(maxHP/5)));
     enemy->setTYPE(getRandomInt(2,4));
     enemy->setName(enemyName[randomIndex]);
 

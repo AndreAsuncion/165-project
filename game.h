@@ -38,7 +38,7 @@ public:
     QGraphicsScene * scene;
 
     // does it what says
-    Unit* createRandomEnemy(int minHP, int maxHP, int minLvl, int maxLvl);
+    Unit* createRandomEnemy(int minHP, int maxHP, int maxLvl);
 public slots:
     void start();
 
