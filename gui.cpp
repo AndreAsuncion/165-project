@@ -3,7 +3,7 @@
 #include <QGraphicsTextItem>
 #include <QBrush>
 
-GUI::GUI(QString string, QGraphicsItem *parent) :QGraphicsRectItem(parent)
+GUI::GUI(int x, QString string, QGraphicsItem *parent) :QGraphicsRectItem(parent), index(x)
 {
     // draw rect
     setRect(0,500,800,100);
@@ -22,7 +22,7 @@ GUI::GUI(QString string, QGraphicsItem *parent) :QGraphicsRectItem(parent)
     text->setPos(xPos,yPos);
 }
 
-GUI::GUI(QGraphicsItem *parent)
+GUI::GUI(QGraphicsItem *parent) :QGraphicsRectItem(parent)
 {
     // draw rect
     setRect(0,500,800,100);
@@ -35,5 +35,5 @@ GUI::GUI(QGraphicsItem *parent)
 
 void GUI::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    emit clicked();
+    emit clicked(index);
 }

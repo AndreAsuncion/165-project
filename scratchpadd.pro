@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = "Animal Abuse"
+TARGET = "Animal Fight Club"
 
 QT = core gui
 
