@@ -6,6 +6,8 @@
 #include "unit.h"
 #include "button.h"
 #include "gui.h"
+//#include "healthTracker.h"
+#include "player.h"
 
 class Game: public QGraphicsView
 {
@@ -24,6 +26,7 @@ public:
 
     //public attributes
     QGraphicsScene * scene;
+    QGraphicsTextItem * playerHealthText;
 
     // does it what says
     Unit* createRandomEnemy(int minHP, int maxHP, int maxAP, int level);
@@ -46,6 +49,7 @@ private:
     Button *backButton;
     Button *testButton;
     GUI *panel;
+    // healthTracker *enemyHealthText;
 };
 
 #endif // GAME_H
