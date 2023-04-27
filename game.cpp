@@ -1,6 +1,4 @@
 #include "game.h"
-#include "button.h"
-#include "gui.h"
 #include "player.h"
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
@@ -29,6 +27,7 @@ Game::Game(QWidget *parent)
     scene = new QGraphicsScene();
     scene->setSceneRect(0,0,800,600);
     setScene(scene);
+
 }
 
 int Game::getRandomInt(int min, int max)
@@ -52,9 +51,11 @@ void Game::start()
 
 void Game::playerMenu()
 {
+    scene->removeItem(panel);
+
     if(enemy->getHP() >= 0){
         // clearing the GUI of the text
-        GUI * panel = new GUI();
+        panel = new GUI();
         scene->addItem(panel);
 
         // drawing the buttons, there's going to be two a fight and an item button
@@ -71,12 +72,10 @@ void Game::playerMenu()
         int ibyPos = 525;
         itemButton->setPos(ibxPos,ibyPos);
         connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
-        connect(fiteButton, SIGNAL(clicked()), this, SLOT(basicAttack()));
-        connect(fiteButton, SIGNAL(clicked()), this, SLOT(disableFightButton()));
-    //    connect(this, SIGNAL(enemyDefeated()), this, SLOT(showFightButton())); // new connection
-
+        connect(fiteButton, SIGNAL(clicked()), this, SLOT(playerAction(0)));
         scene->addItem(itemButton);
-    } else{
+    }
+    else{
         startCombat();
     }
 }
@@ -119,29 +118,28 @@ void Game::abilityMenu()
     scene->addItem(backButton);
 }
 
-void Game::basicAttack()
-{
-    //remove unneeded buttons
+//The following button should go to enemyAction
+
+//    backButton = new Button(QString("Back"));
+//    int bbxPos = 600;
+//    int bbyPos = 525;
+//    backButton->setPos(bbxPos,bbyPos);
+//    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
+//    scene->addItem(backButton);
+
+int Game::damageCalc(int x){
+    switch(x){
+    case 0:
+        return player->getAP();
+    }
+}
+
+void Game::playerAction(int actionChoice){
     scene->removeItem(fiteButton);
     scene->removeItem(itemButton);
 
-    int attackPower = player->getAP();
-    int enemyAttack = enemy->getAP();
+    enemy->changeHealth(Game::damageCalc(actionChoice));
 
-    int enemyHealth = enemy->getHP();
-
-    enemyHealth -= attackPower;
-
-    enemy->setHP(enemyHealth);
-
-    int playerHealth = player->getHP();
-
-    playerHealth -= enemyAttack;
-
-    player->setHP(playerHealth);
-
-
-    //shows HP
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
     enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
     enemyHealthText->setDefaultTextColor(Qt::white);
@@ -149,27 +147,15 @@ void Game::basicAttack()
     enemyHealthText->setPos(400, 525);
     scene->addItem(enemyHealthText);
 
-
     Game::enemyAttack();
 
-
-    backButton = new Button(QString("Back"));
-    int bbxPos = 600;
-    int bbyPos = 525;
-    backButton->setPos(bbxPos,bbyPos);
-    connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
-    scene->addItem(backButton);
 }
 
 void Game::enemyAttack(){
-    //remove unneeded buttons
-    scene->removeItem(fiteButton);
-    scene->removeItem(itemButton);
-
 
     int enemyAttack = enemy->getAP();
 
-    player->changeHealth(enemyAttack);
+    player->changeHealth(-enemyAttack);
 
     //shows HP
     QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
@@ -181,12 +167,11 @@ void Game::enemyAttack(){
 }
 
 
-
-
+// Call this function to make the blue GUI rectangle thing have text in it
 void Game::textBox(QString string)
 {
     // draws the blue rectangle for the battle GUI
-    GUI * panel = new GUI(string);
+    panel = new GUI(string);
     connect(panel,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(panel);
 }

@@ -3,15 +3,21 @@
 // constructor
 
 // this first constructor is to set the player upon starting the game
-Unit::Unit(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), maxHealthPoints(10), attackPower(2), level(1), type(1) {}
+Unit::Unit(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), maxHealthPoints(10), attackPower(2), level(1), type(1)
+{
+    healthPoints = maxHealthPoints;
+}
 
 // enemy constructor
-Unit::Unit(int hp, int ap, int lvl, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), maxHealthPoints(hp), attackPower(ap), level(lvl), type(1) {}
+Unit::Unit(int hp, int ap, int lvl, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), maxHealthPoints(hp), attackPower(ap), level(lvl), type(1)
+{
+    healthPoints = maxHealthPoints;
+}
 
 // variable getters
 int Unit::getHP()
 {
-    return this->maxHealthPoints;
+    return this->healthPoints;
 }
 
 int Unit::getAP()
@@ -29,6 +35,11 @@ int Unit::getTYPE()
     return this->type;
 }
 
+int Unit::getMHP()
+{
+    return this->maxHealthPoints;
+}
+
 QString Unit::getName()
 {
     return this->name;
@@ -37,7 +48,7 @@ QString Unit::getName()
 // variable setters
 void Unit::setHP(int x)
 {
-    maxHealthPoints = x;
+    healthPoints = x;
 }
 
 void Unit::setAP(int x)
@@ -53,6 +64,11 @@ void Unit::setLVL(int x)
 void Unit::setTYPE(int x)
 {
     type = x;
+}
+
+void Unit::setMHP(int x)
+{
+    maxHealthPoints = x;
 }
 
 void Unit::setName(QString string)

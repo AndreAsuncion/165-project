@@ -15,12 +15,14 @@ public:
     // variable getters
     int getHP();
     int getAP();
+    int getMHP();
     int getLVL();
     int getTYPE();
     QString getName();
 
     // variable setters
     void setHP(int x);
+    void setMHP(int x);
     void setAP(int x);
     void setLVL(int x);
     void setTYPE(int x);
