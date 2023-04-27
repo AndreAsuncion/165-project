@@ -48,11 +48,8 @@ void Game::start()
     startCombat();
 }
 
-
 void Game::playerMenu()
 {
-    scene->removeItem(panel);
-
     panel = new GUI();
     scene->addItem(panel);
 
@@ -68,7 +65,6 @@ void Game::playerMenu()
     connect(itemButton,SIGNAL(clicked()),this,SLOT(abilityMenu()));
     scene->addItem(itemButton);
 }
-
 
 void Game::abilityMenu()
 {
@@ -99,7 +95,7 @@ void Game::abilityMenu()
 }
 
 //The following button should go to enemyAction
-
+//
 //    backButton = new Button(QString("Back"));
 //    int bbxPos = 600;
 //    int bbyPos = 525;
@@ -194,17 +190,19 @@ void Game::enemyAttack()
 }
 
 // Call this function to make the blue GUI rectangle thing have text in it
-void Game::textBox(QString string)
+void Game::textBox(int x, QString string)
 {
     // draws the blue rectangle for the battle GUI
-    panel = new GUI(1, string);
+    panel = new GUI(x, string);
     connect(panel,SIGNAL(clicked(int)),this,SLOT(menuNav(int)));
     scene->addItem(panel);
 }
 
 void Game::menuNav(int x)
 {
-    qDebug() << "hi";
+    // hides the textbox
+    scene->removeItem(panel);
+
     switch(x)
     {
     case(1): playerMenu();
@@ -243,9 +241,7 @@ void Game::startCombat()
 {
     // function creates an enemy based on player's stats
     enemy = createRandomEnemy(player->getHP() - (player->getLVL() * 3), player->getHP(), player->getAP() - (player->getLVL() * 3), player->getLVL());
-    textBox(QString("A wild %1 is approaching!").arg(enemy->getName()));
-
-    qDebug() << enemy->getTYPE();
+    textBox(1, QString("A wild %1 is approaching!").arg(enemy->getName()));
 }
 
 Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
