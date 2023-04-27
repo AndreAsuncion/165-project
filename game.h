@@ -35,6 +35,7 @@ public slots:
     void abilityMenu();
     void playerAction(int x);
     void menuNav(int x);
+    void gameOver();
     //void playerAction(); was for testing purposes
 private:
     Button *fiteButton;

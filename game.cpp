@@ -227,9 +227,39 @@ void Game::enemyAttack()
     connect(backButton,SIGNAL(clicked()),this,SLOT(playerMenu()));
     scene->addItem(backButton);
 
+    if(player->getHP() <= 0){
+        Game::gameOver();
+    }
+
     // check if playerhp < 0
     // if that is the case
     // start the failstate method
+}
+
+void Game::gameOver(){
+    scene->clear();
+
+    QGraphicsTextItem * titleText = new QGraphicsTextItem(QString("Game Over"));
+    QFont titleFont("impact", 50);
+    titleText->setFont(titleFont);
+    int ttxPos = this->width()/2 - titleText->boundingRect().width()/2;
+    int ttyPos = 150;
+    titleText->setPos(ttxPos,ttyPos);
+    scene->addItem(titleText);
+
+    Button * playButton = new Button(QString("Restart"));
+    int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
+    int byPos = 275;
+    playButton->setPos(bxPos,byPos);
+    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
+    scene->addItem(playButton);
+
+    Button * quitButton = new Button(QString("Quit"));
+    int qxPos = this->width()/2 - quitButton->boundingRect().width()/2;
+    int qyPos = 350;
+    quitButton->setPos(qxPos,qyPos);
+    connect(quitButton,SIGNAL(clicked()),this,SLOT(close()));
+    scene->addItem(quitButton);
 }
 
 // Call this function to make the blue GUI rectangle thing have text in it
