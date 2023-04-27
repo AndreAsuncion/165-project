@@ -1,7 +1,5 @@
 #include "gui.h"
-#include <QGraphicsScene>
-#include <QGraphicsTextItem>
-#include <QBrush>
+
 
 GUI::GUI(int x, QString string, QGraphicsItem *parent) :QGraphicsRectItem(parent), index(x)
 {

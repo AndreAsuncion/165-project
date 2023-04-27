@@ -1,12 +1,4 @@
 #include "game.h"
-#include <QGraphicsTextItem>
-#include <QGraphicsRectItem>
-#include <QtGlobal>
-#include <QTime>
-#include <QPixmap>
-#include <QList>
-#include <QIcon>
-#include <QDebug>
 
 Player * player;
 Unit * enemy;
@@ -318,15 +310,15 @@ Unit *Game::createRandomEnemy(int minHP, int maxHP, int maxAP, int level)
 
     // setting the members of enemy
     enemy->setLVL(level);
-    enemy->setHP(getRandomInt(minHP+1,maxHP));
+    enemy->setMHP(getRandomInt(minHP+1,maxHP));
     enemy->setAP(getRandomInt(1,maxAP));
     enemy->setTYPE(getRandomInt(2,4));
     enemy->setName(enemyName[randomIndex]);
 
     // health tracker
-    // enemyHealthText = new healthTracker(enemy);
-    // enemyHealthText->setPos(400,600);
-    // scene->addItem(enemyHealthText);
+    enemyHealthText = new healthTracker(enemy);
+    enemyHealthText->setPos(400,0);
+    scene->addItem(enemyHealthText);
 
     return enemy;
 }

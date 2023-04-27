@@ -3,10 +3,18 @@
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsTextItem>
+#include <QGraphicsRectItem>
+#include <QtGlobal>
+#include <QTime>
+#include <QPixmap>
+#include <QList>
+#include <QIcon>
+#include <QDebug>
 #include "unit.h"
 #include "button.h"
 #include "gui.h"
-//#include "healthTracker.h"
+#include "healthTracker.h"
 #include "player.h"
 
 class Game: public QGraphicsView
@@ -49,7 +57,7 @@ private:
     Button *backButton;
     Button *testButton;
     GUI *panel;
-    // healthTracker *enemyHealthText;
+    healthTracker *enemyHealthText;
 };
 
 #endif // GAME_H
