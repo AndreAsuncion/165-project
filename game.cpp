@@ -136,7 +136,7 @@ int Game::damageCalc(int x, Unit* defender)
 
 void Game::playerAction(int x)
 {
-    if (enemy->getHP() <= 0) {
+    if (enemy->getHP() < 0) {
 
         if(enemy->getLVL() > player->getLVL()){
             int expGained = ( (enemy->getLVL() * 2 ) + player->getLVL() );
