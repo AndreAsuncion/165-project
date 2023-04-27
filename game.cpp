@@ -136,34 +136,77 @@ int Game::damageCalc(int x, Unit* defender)
 
 void Game::playerAction(int x)
 {
-    // GUI cleanup
-    if(x == 1)
-    {
-        scene->removeItem(fiteButton);
-        scene->removeItem(itemButton);
+    if (enemy->getHP() < 0) {
+
+        if(enemy->getLVL() > player->getLVL()){
+            int expGained = ( (enemy->getLVL() * 2 ) + player->getLVL() );
+            player->setLVL(expGained);
+
+
+            textBox(1, QString("XP Gained: %1").arg(expGained));
+        }
+        else {
+            int expGained = ( (enemy->getLVL() * 1 ) + player->getLVL() );
+            player->setLVL(expGained);
+
+
+            textBox(1, QString("XP Gained: %1").arg(expGained));
+        }
+
+
     }
-    else
-    {
-        scene->removeItem(circleButton);
-        scene->removeItem(triangleButton);
-        scene->removeItem(squareButton);
-        scene->removeItem(backButton);
+
+
+//    if(enemy->getHP() < 1){
+//        int eLVL = enemy->getLVL();
+//        if(eLVL > player->getLVL()){
+//            int lvlGained = (eLVL);
+//            player->setLVL( (eLVL) + player->getLVL() );
+//        } else {
+//            int lvlGained = (eLVL/2);
+
+//            player->setLVL( (eLVL/2) + player->getLVL() );
+//        }
+//        startCombat();
+//    }
+    else {
+        // GUI cleanup
+        if(x == 1)
+        {
+            scene->removeItem(fiteButton);
+            scene->removeItem(itemButton);
+        }
+        else
+        {
+            scene->removeItem(circleButton);
+            scene->removeItem(triangleButton);
+            scene->removeItem(squareButton);
+            scene->removeItem(backButton);
+        }
+
+
+        enemy->changeHealth(-(damageCalc(x,enemy)));
+
+        QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
+        enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
+        enemyHealthText->setDefaultTextColor(Qt::white);
+        enemyHealthText->setFont(QFont("times",16));
+        enemyHealthText->setPos(400, 525);
+        scene->addItem(enemyHealthText);
+
+        Game::enemyAttack();
     }
 
-    //int damage = -(damageCalc(x,enemy));
-    //qDebug() << damage << " was dealt";
 
-    enemy->changeHealth(-(damageCalc(x,enemy)));
-
-    QGraphicsTextItem *enemyHealthText = new QGraphicsTextItem();
-    enemyHealthText->setPlainText(QString("Enemy HP: ") + QString::number(enemy->getHP()));
-    enemyHealthText->setDefaultTextColor(Qt::white);
-    enemyHealthText->setFont(QFont("times",16));
-    enemyHealthText->setPos(400, 525);
-    scene->addItem(enemyHealthText);
-
-    Game::enemyAttack();
 }
+
+//void getXpPrompt(int x, QString string){
+//    panel = new GUI(x, string);
+//    connect(panel,SIGNAL(clicked(int)),this,SLOT(menuNav(int)));
+//    scene->addItem(panel);
+
+//}
+
 
 void Game::enemyAttack()
 {
@@ -206,6 +249,7 @@ void Game::menuNav(int x)
     switch(x)
     {
     case(1): playerMenu();
+//    case(2):
     }
 }
 
