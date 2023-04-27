@@ -3,9 +3,19 @@
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsTextItem>
+#include <QGraphicsRectItem>
+#include <QtGlobal>
+#include <QTime>
+#include <QPixmap>
+#include <QList>
+#include <QIcon>
+#include <QDebug>
 #include "unit.h"
 #include "button.h"
 #include "gui.h"
+#include "healthTracker.h"
+#include "player.h"
 
 class Game: public QGraphicsView
 {
@@ -20,9 +30,11 @@ public:
     void textBox(int x, QString string); // makes a text box that contains the passed string
     int damageCalc(int x, Unit* defender);
     int getRandomInt(int min, int max); // randomizer
+    void gameOver();
 
     //public attributes
     QGraphicsScene * scene;
+    QGraphicsTextItem * playerHealthText;
 
     // does it what says
     Unit* createRandomEnemy(int minHP, int maxHP, int maxAP, int level);
@@ -46,6 +58,7 @@ private:
     Button *backButton;
     Button *testButton;
     GUI *panel;
+    healthTracker *enemyHealthText;
 };
 
 #endif // GAME_H

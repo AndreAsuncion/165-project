@@ -3,6 +3,7 @@
 
 #include <QGraphicsPixmapItem>
 #include <QObject>
+#include <QFont>
 
 class Unit: public QObject, public QGraphicsPixmapItem
 {

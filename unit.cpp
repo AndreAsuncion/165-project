@@ -69,6 +69,7 @@ void Unit::setTYPE(int x)
 void Unit::setMHP(int x)
 {
     maxHealthPoints = x;
+    healthPoints = x;
 }
 
 void Unit::setName(QString string)
@@ -81,4 +82,9 @@ void Unit::changeHealth(int x)
 {
     // int x will be negative for damage, positive for healing
     healthPoints += x;
+
+    if(healthPoints > maxHealthPoints)
+        healthPoints = maxHealthPoints;
+    else if(healthPoints < 0)
+        healthPoints = 0;
 }

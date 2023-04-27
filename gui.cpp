@@ -1,7 +1,5 @@
 #include "gui.h"
-#include <QGraphicsScene>
-#include <QGraphicsTextItem>
-#include <QBrush>
+
 
 GUI::GUI(int x, QString string, QGraphicsItem *parent) :QGraphicsRectItem(parent), index(x)
 {
@@ -15,8 +13,7 @@ GUI::GUI(int x, QString string, QGraphicsItem *parent) :QGraphicsRectItem(parent
 
     // draw the text
     text = new QGraphicsTextItem(string,this);
-    QFont asdkcvuhawe("impact", 40);
-    text->setFont(asdkcvuhawe);
+    text->setFont(QFont("impact", 40));
     int xPos = rect().width()/2 - text->boundingRect().width()/2;
     int yPos = 510;
     text->setPos(xPos,yPos);

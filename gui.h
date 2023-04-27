@@ -4,6 +4,9 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QFont>
+#include <QGraphicsScene>
+#include <QGraphicsTextItem>
+#include <QBrush>
 
 class GUI: public QObject, public QGraphicsRectItem
 {
